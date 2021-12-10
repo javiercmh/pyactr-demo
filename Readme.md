@@ -9,4 +9,8 @@
 ## Install dependencies
 
     $ pip install pyactr
+    tkinter (optional)
 
+# Run req
+
+Make sure to run the venv version of python3.
