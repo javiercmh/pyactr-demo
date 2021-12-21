@@ -12,7 +12,7 @@ addition = actr.ACTRModel()
 actr.chunktype("number", "number, next")
 actr.chunktype("add", "arg1, arg2, sum, count")
 
-# Set up declaritive memory
+# Shortcut to declarative memory
 dm = addition.decmem
 
 zero = actr.makechunk(nameofchunk="zero", typename="number", number="zero", next="one")
@@ -27,7 +27,6 @@ eight = actr.makechunk(nameofchunk="eight", typename="number", number="eight", n
 nine = actr.makechunk(nameofchunk="nine", typename="number", number="nine", next="ten")
 ten = actr.makechunk(nameofchunk="ten", typename="number", number="ten")
 
-
 dm.add(zero)
 dm.add(one)
 dm.add(two)
@@ -40,7 +39,7 @@ dm.add(eight)
 dm.add(nine)
 dm.add(ten)
 
-#Set up goal
+# Set up goal
 goal_chunk = actr.makechunk(nameofchunk="goal", typename="add", arg1="five", arg2="two")
 goal = addition.set_goal("goal")
 goal.add(goal_chunk)
@@ -50,22 +49,22 @@ goal.add(goal_chunk)
 
 addition.productionstring(name="initialize_addition", string="""
         =goal>
-        isa  add
+        isa add
         arg1 =num1
         arg2 =num2
-        sum nil
+        sum None
         ==>
         =goal>
         isa add
         sum =num1
-        count =zero
+        count zero
         +retrieval>
         isa number
         number =num1""")
 
 addition.productionstring(name="terminate_addition", string="""
         =goal>
-        isa  add
+        isa add
         count =num
         arg2 =num
         sum =answer
@@ -75,14 +74,14 @@ addition.productionstring(name="terminate_addition", string="""
         ==>
         =goal>
         isa add
-        count nil
+        count None
         """)
         #!output! =answer - meant to be last line in the string
         
 
 addition.productionstring(name="increment_count", string="""
         =goal>
-        isa  add
+        isa add
         sum =sum
         count =count
         =retrieval>
@@ -99,7 +98,7 @@ addition.productionstring(name="increment_count", string="""
         
 addition.productionstring(name="increment_sum", string="""
         =goal>
-        isa  add
+        isa add
         sum =sum
         count =count
         arg2 =count
