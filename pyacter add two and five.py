@@ -20,7 +20,7 @@ for i in range(11):
     dm.add(actr.makechunk(nameofchunk=str(i), typename="number", number=i, next=i+1))
 
 # Set up goal
-goal_chunk = actr.makechunk(nameofchunk="goal", typename="add", arg1=2, arg2=5)
+goal_chunk = actr.makechunk(nameofchunk="goal", typename="add", arg1=5, arg2=2)
 goal = addition.set_goal("goal")
 goal.add(goal_chunk)
 
@@ -30,16 +30,51 @@ addition.productionstring(name="initialize_addition", string="""
         arg1    =num1
         arg2    =num2
         sum     None
-    ?retrieval>
-        buffer  empty
     ==>
     =goal>
         isa     add
         sum     =num1
-        count   =num1
+        count   0
     +retrieval>
         isa     number
         number  =num1
+    """)
+
+addition.productionstring(name="increment_sum", string="""
+    =goal>
+        isa     add
+        sum     =sum
+        count   =count
+        arg2    ~=count
+    =retrieval>
+        isa     number
+        number  =sum
+        next    =newsum
+    ==>
+    =goal>
+        isa add
+        sum =newsum
+    +retrieval>
+        isa number
+        number =count
+    """)
+
+addition.productionstring(name="increment_count", string="""
+    =goal>
+        isa     add
+        sum     =sum
+        count   =count
+    =retrieval>
+        isa number
+        number  =count
+        next    =next
+    ==>
+    =goal>
+        isa add
+        count =next
+    +retrieval>
+        isa number
+        number =sum
     """)
 
 addition.productionstring(name="terminate_addition", string="""
@@ -56,45 +91,8 @@ addition.productionstring(name="terminate_addition", string="""
         isa add
         count None
     """)
-    #!output! =answer - meant to be last line in the string
-
-
-addition.productionstring(name="increment_count", string="""
-    =goal>
-        isa add
-        sum =sum
-        count =count
-    =retrieval>
-        isa number
-        number =count
-        next =newcount
-    ==>
-    =goal>
-        isa add
-        count =newcount
-    +retrieval>
-        isa number
-        number =sum
-    """)
-        
-addition.productionstring(name="increment_sum", string="""
-    =goal>
-        isa add
-        sum =sum
-        count =count
-        arg2 =count
-    =retrieval>
-        isa number
-        number =sum
-        next =newsum
-    ==>
-    =goal>
-        isa add
-        sum =newsum
-    +retrieval>
-        isa number
-        number =count
-    """)
+    #!output! =answer - meant to be last line in the string        
+    # clean goal buffer?
 
 simulate = addition.simulation()
 simulate.run()
